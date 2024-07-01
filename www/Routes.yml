@@ -1,0 +1,43 @@
+/login:
+  Controller: SecurityC
+  Action: login
+
+/register:
+  Controller: SecurityC
+  Action: register
+
+/home:
+  Controller: Main
+  Action: home
+
+/dashboard:
+  Controller: Dashboard
+  Action: index
+
+/dashboard/users:
+  Controller: Dashboard
+  Action: getUsers
+
+/add-user:
+  Controller: Dashboard
+  Action: addUserForm
+
+/dashboard/addUser:
+  Controller: Dashboard
+  Action: addUser
+
+/dashboard/updateUserForm:
+  Controller: Dashboard
+  Action: updateUserForm
+
+/dashboard/updateUser:
+  Controller: Dashboard
+  Action: updateUser
+
+/dashboard/deleteUser:
+  Controller: Dashboard
+  Action: deleteUser
+
+/logout:
+  Controller: Security
+  Action: logout
