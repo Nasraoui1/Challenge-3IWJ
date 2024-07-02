@@ -13,7 +13,7 @@ class SQL {
         $dbname = getenv('DBNAME') ?: 'postgres_db';
         $dbuser = getenv('DBUSER') ?: 'postgres';
         $dbpwd = getenv('DBPWD') ?: 'postgres';
-        $dbhost = getenv('DBHOST') ?: 'postgres_db';
+        $dbhost = getenv('DBHOST') ?: 'postgres';
         $dbport = getenv('DBPORT') ?: '5432';
 
         $dsn = "pgsql:host={$dbhost};port={$dbport};dbname={$dbname}";
