@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\Security;
 use App\Core\SQL;
+use App\Core\View;
 
 class Dashboard {
 
@@ -11,56 +12,63 @@ class Dashboard {
 
     public function __construct() {
         $this->db = new SQL();
+        $this->checkAdmin(); // Check admin access on instantiation
     }
 
-    public function index() {
-        if (!Security::isLoggedIn()) {
+    private function checkAdmin() {
+        if (!Security::isLoggedIn() || $_SESSION['id_role'] != 1) {
             header('Location: /login');
             exit;
         }
+    }
+
+    public function index() {
         $userCount = $this->db->getUserCount();
+        $adminCount = $this->db->getAdminCount();
         $elementsCount = [
             'users' => $userCount,
+            'admin' => $adminCount,
+            'pages' => 0 // Assuming you have logic to get the page count
         ];
-
         $content = '../Views/dashboard.php';
         include '../Views/dashboardTemplate.php';
     }
 
-    public function getUsersCount() {
-        $userCount = $this->db->getUserCount();
-        $content = '../Views/users.php'; // Path to the users view
+    public function getUsers() {
+        $this->checkAdmin();
+        $users = $this->db->getAllUsers();
+        $content = '../Views/users.php';
         include '../Views/dashboardTemplate.php';
     }
 
-    public function getUsers() {
-        $users = $this->db->getAllUsers();
-        $content = '../Views/users.php'; // Path to the users view
+    public function getAdmins() {
+        $this->checkAdmin();
+        $admins = $this->db->getUsersByRole(1);
+        $content = '../Views/admins.php';
         include '../Views/dashboardTemplate.php';
     }
 
     public function addUserForm() {
+        $this->checkAdmin();
         $content = '../Views/addUserForm.php';
         include '../Views/dashboardTemplate.php';
     }
 
     public function addUser() {
-        // Traitement du formulaire pour ajouter l'utilisateur
+        $this->checkAdmin();
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $id_role = $_POST['id_role'];
 
-        // Ajout de l'utilisateur dans la base de données
-        $this->db->createUser($firstname, $lastname, $email, $password, $id_role, null);
-
-        // Redirection vers la vue des utilisateurs
+        $this->db->createUser($firstname, $lastname, $email, $password, $id_role);
         header('Location: /dashboard/users');
         exit;
     }
 
     public function updateUserForm() {
+        $this->checkAdmin();
         $id = $_POST['id'];
         $user = $this->db->getUserById($id);
         $content = '../Views/updateUserForm.php';
@@ -68,22 +76,20 @@ class Dashboard {
     }
 
     public function updateUser() {
+        $this->checkAdmin();
         $id = $_POST['id'];
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];
-        $role = $_POST['role'];
+        $id_role = $_POST['id_role'];
 
-        $success = $this->db->updateUser($id, $firstname, $lastname, $email, $role);
-        if ($success) {
-            header('Location: /dashboard/users');
-            exit;
-        } else {
-            echo 'Error updating user';
-        }
+        $this->db->updateUser($id, $firstname, $lastname, $email, $id_role);
+        header('Location: /dashboard/users');
+        exit;
     }
 
     public function deleteUser() {
+        $this->checkAdmin();
         $id = $_POST['id'];
         $success = $this->db->deleteUser($id);
         if ($success) {

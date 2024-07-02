@@ -32,20 +32,19 @@ class SQL {
         return $this->pdo;
     }
 
-    public function createUser($firstname, $lastname, $email, $password,$id_role, $birthday) {
-        $stmt = $this->pdo->prepare("INSERT INTO users (firstname, lastname, email, password,id_role, birthday) VALUES (:firstname, :lastname, :email, :password, :id_role, :birthday)");
+    public function createUser($firstname, $lastname, $email, $password,$id_role) {
+        $stmt = $this->pdo->prepare("INSERT INTO chall_users (firstname, lastname, email, password,id_role) VALUES (:firstname, :lastname, :email, :password, :id_role)");
         $stmt->execute([
             'firstname' => $firstname,
             'lastname' => $lastname,
             'email' => $email,
             'password' => $this->hashPassword($password),
             'id_role' => $id_role,
-            'birthday' => $birthday
         ]);
     }
 
     public function getUserByEmail($email) {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt = $this->pdo->prepare("SELECT * FROM chall_users WHERE email = :email");
         $stmt->execute(['email' => $email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -58,36 +57,53 @@ class SQL {
         return password_verify($password, $hashedPassword);
     }
 
-    public function getUserCount(): int {
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM users");
+    public function getUserCount() {
+        $stmt = $this->pdo->query("SELECT COUNT(*) AS count FROM chall_users WHERE id_role = 0");
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return (int) $result['count'];
+        return $result ? $result['count'] : 0;
+    }
+
+    public function getAdminCount() {
+        $stmt = $this->pdo->query("SELECT COUNT(*) AS count FROM chall_users WHERE id_role = 1");
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['count'] : 0;
+    }
+
+    public function getPageCount() {
+        // Placeholder for actual logic to get the page count
+        return 0; // Adjust this as necessary
     }
 
     public function getAllUsers() {
-        $stmt = $this->pdo->query("SELECT * FROM users");
+        $stmt = $this->pdo->query("SELECT * FROM chall_users");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getUserById($id) {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt = $this->pdo->prepare("SELECT * FROM chall_users WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateUser($id, $firstname, $lastname, $email, $role) {
-        $stmt = $this->pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, email = :email, role = :role WHERE id = :id");
-        return $stmt->execute([
+    public function getUsersByRole($role) {
+        $stmt = $this->pdo->prepare("SELECT * FROM chall_users WHERE id_role = :role");
+        $stmt->execute(['role' => $role]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateUser($id, $firstname, $lastname, $email, $id_role) {
+        $stmt = $this->pdo->prepare("UPDATE chall_users SET firstname = :firstname, lastname = :lastname, email = :email, id_role = :id_role WHERE id = :id");
+        $stmt->execute([
             'id' => $id,
             'firstname' => $firstname,
             'lastname' => $lastname,
             'email' => $email,
-            'role' => $role
+            'id_role' => $id_role
         ]);
     }
 
     public function deleteUser($id) {
-        $stmt = $this->pdo->prepare("DELETE FROM users WHERE id = :id");
+        $stmt = $this->pdo->prepare("DELETE FROM chall_users WHERE id = :id");
         return $stmt->execute(['id' => $id]);
     }
 }

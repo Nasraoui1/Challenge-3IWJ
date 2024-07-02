@@ -103,6 +103,7 @@
     </style>
 </head>
 <body>
+<!-- addUserForm.php -->
 <div class="add-user-form">
     <h2>Add User</h2>
 
@@ -128,14 +129,12 @@
             <input type="password" id="password" name="password" placeholder="Enter password" required>
         </div>
         <div class="form-group">
-            <label for="role">Role</label>
-            <select id="role" name="role" required>
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
+            <label for="id_role">Role</label>
+            <select id="id_role" name="id_role" required>
+                <option value="0">User</option>
+                <option value="1">Admin</option>
             </select>
         </div>
         <button type="submit" class="btn-primary">Add User</button>
     </form>
 </div>
-</body>
-</html>

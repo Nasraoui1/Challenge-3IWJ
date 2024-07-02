@@ -1,15 +1,11 @@
 <?php
-session_start();
 global $bdd;
 $page_titre = "Register";
 require("../config.php");
 
-// Display any error messages
-$error_message = "";
-if (isset($_SESSION['error'])) {
-    $error_message = $_SESSION['error'];
-    unset($_SESSION['error']);
-}
+// Affichage des messages d'erreur et de succès
+$error_message = isset($error_message) ? $error_message : '';
+$message = isset($message) ? $message : '';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -19,6 +15,7 @@ if (isset($_SESSION['error'])) {
     <title>Register</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* Include the CSS styles used in the login view */
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f4f4f4;
@@ -38,18 +35,11 @@ if (isset($_SESSION['error'])) {
             border: 1px solid #e3e6f0;
             border-radius: 0.35rem;
             box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         .header {
             text-align: center;
             margin-bottom: 1.5rem;
-        }
-
-        .header img {
-            height: 40px;
         }
 
         .header h1 {
@@ -59,21 +49,26 @@ if (isset($_SESSION['error'])) {
             margin: 0.5rem 0;
         }
 
-        .header p {
-            color: #6c757d;
-            margin: 0;
+        .error-message {
+            color: red;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .message {
+            color: green;
+            margin-bottom: 1rem;
+            text-align: center;
         }
 
         .form-group {
             margin-bottom: 1rem;
-            width: 100%;
         }
 
         .form-group label {
             display: block;
             font-weight: 500;
             margin-bottom: 0.5rem;
-            text-align: left;
         }
 
         .form-group input {
@@ -111,7 +106,6 @@ if (isset($_SESSION['error'])) {
         .text-center {
             text-align: center;
             margin-top: 1rem;
-            width: 100%;
         }
 
         .text-center a {
@@ -122,26 +116,23 @@ if (isset($_SESSION['error'])) {
         .text-center a:hover {
             text-decoration: underline;
         }
-
-        .error-message {
-            color: red;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>Join us !</h1>
-        <p>Create your account</p>
+        <h1>Register</h1>
     </div>
 
     <?php if ($error_message): ?>
         <p class="error-message"><?php echo htmlspecialchars($error_message); ?></p>
     <?php endif; ?>
 
-    <form method="POST" action="register">
+    <?php if ($message): ?>
+        <p class="message"><?php echo htmlspecialchars($message); ?></p>
+    <?php endif; ?>
+
+    <form method="POST" action="">
         <div class="form-group">
             <label for="firstname">First Name</label>
             <input type="text" id="firstname" name="firstname" placeholder="Enter your first name" required>
@@ -158,13 +149,9 @@ if (isset($_SESSION['error'])) {
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Enter your password" required>
         </div>
-        <div class="form-group">
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
-        </div>
-        <button type="submit" class="btn-primary">Create Account</button>
+        <button type="submit" class="btn-primary">Register</button>
         <div class="text-center">
-            <p>Already have an account? <a href="login">Sign in</a></p>
+            <p>Already have an account? <a href="/login">Login here</a></p>
         </div>
     </form>
 </div>

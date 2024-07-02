@@ -12,16 +12,27 @@ class User extends SQL
     protected string $email;
     protected ?string $password = null;
     protected int $id_role;
-    protected ?string $reset_token = null;
-    protected ?DateTime $reset_expires = null;
-    protected ?string $activation_token = null;
     protected ?DateTime $birthday = null;
     protected ?DateTime $creation_date = null;
     protected ?DateTime $modification_date = null;
+    protected string $token = "";
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function login(string $email, string $password): bool
+    {
+        $user = $this->getUserByEmail($email);
+
+        if ($user && $this->verifyPassword($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['id_role'] = $user['id_role'];
+            return true;
+        }
+        return false;
     }
 
     public function setId(?int $id): void
@@ -81,34 +92,15 @@ class User extends SQL
         $this->id_role = $id_role;
     }
 
-    public function getResetExpires(): ?DateTime
+    public function setToken($token): void
     {
-        return $this->reset_expires;
+        $this->token = $token;
+        $this->token_expiry = date("Y-m-d H:i:s", strtotime('+1 hour'));
     }
 
-    public function setResetExpires(?DateTime $reset_expires): void
+    public function getToken(): ?string
     {
-        $this->reset_expires = $reset_expires;
-    }
-
-    public function getResetToken(): ?string
-    {
-        return $this->reset_token;
-    }
-
-    public function setResetToken(?string $reset_token): void
-    {
-        $this->reset_token = $reset_token;
-    }
-
-    public function getActivationToken(): ?string
-    {
-        return $this->activation_token;
-    }
-
-    public function setActivationToken(?string $activation_token): void
-    {
-        $this->activation_token = $activation_token;
+        return $this->token;
     }
 
     public function getBirthday(): ?DateTime
@@ -140,4 +132,34 @@ class User extends SQL
     {
         $this->modification_date = $modification_date;
     }
+
+    public function createUser($firstname, $lastname, $email, $password, $id_role)
+    {
+        $activation_token = $this->generateToken();
+        $stmt = $this->pdo->prepare("INSERT INTO chall_users (firstname, lastname, email, password, id_role, activation_token) VALUES (:firstname, :lastname, :email, :password, :id_role, :activation_token)");
+        $stmt->execute([
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'email' => $email,
+            'password' => $this->hashPassword($password),
+            'id_role' => $id_role,
+            'activation_token' => $activation_token,
+        ]);
+        return $activation_token;
+    }
+
+    public function generateToken()
+    {
+        return bin2hex(random_bytes(16));
+    }
+
+    public function activateUser($token)
+    {
+        $stmt = $this->pdo->prepare("UPDATE chall_users SET activation_token = NULL WHERE activation_token = :token");
+        $stmt->execute(['token' => $token]);
+        return $stmt->rowCount() > 0;
+    }
+
+
+
 }

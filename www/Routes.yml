@@ -18,7 +18,11 @@
   Controller: Dashboard
   Action: getUsers
 
-/add-user:
+/dashboard/admins:
+  Controller: Dashboard
+  Action: getAdmins
+
+/dashboard/add-user:
   Controller: Dashboard
   Action: addUserForm
 
@@ -39,5 +43,14 @@
   Action: deleteUser
 
 /logout:
-  Controller: Security
+  Controller: SecurityC
   Action: logout
+
+
+/resetpassword:
+  Controller: SecurityC
+  Action: showResetPasswordForm
+
+/resetPasswordProcess:
+  Controller: SecurityC
+  Action: processResetPassword

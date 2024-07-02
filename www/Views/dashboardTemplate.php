@@ -17,8 +17,8 @@
         <nav class="sidebar-nav">
             <ul>
                 <li><a href="/dashboard">Overview</a></li>
-                <li><a href="/users">Utilisateurs</a></li>
-                <li><a href="#admins">Administrateurs</a></li>
+                <li><a href="/dashboard/users">Utilisateurs</a></li>
+                <li><a href="/dashboard/admins">Administrateurs</a></li>
                 <li><a href="#pages">Pages</a></li>
             </ul>
         </nav>

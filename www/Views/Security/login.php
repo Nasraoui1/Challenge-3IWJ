@@ -2,14 +2,20 @@
 global $bdd;
 $page_titre = "Login";
 require("../config.php");
-?>
 
+// Display any error messages
+$error_message = "";
+if (isset($_SESSION['error'])) {
+    $error_message = $_SESSION['error'];
+    unset($_SESSION['error']);
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Mindzone</title>
+    <title>Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -31,18 +37,11 @@ require("../config.php");
             border: 1px solid #e3e6f0;
             border-radius: 0.35rem;
             box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         .header {
             text-align: center;
             margin-bottom: 1.5rem;
-        }
-
-        .header img {
-            height: 40px;
         }
 
         .header h1 {
@@ -52,21 +51,20 @@ require("../config.php");
             margin: 0.5rem 0;
         }
 
-        .header p {
-            color: #6c757d;
-            margin: 0;
+        .error-message {
+            color: red;
+            margin-bottom: 1rem;
+            text-align: center;
         }
 
         .form-group {
             margin-bottom: 1rem;
-            width: 100%;
         }
 
         .form-group label {
             display: block;
             font-weight: 500;
             margin-bottom: 0.5rem;
-            text-align: left;
         }
 
         .form-group input {
@@ -82,22 +80,6 @@ require("../config.php");
             outline: none;
             border-color: #007bff;
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-
-        .form-check {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            width: 100%;
-            justify-content: flex-start;
-        }
-
-        .form-check input {
-            margin-right: 0.5rem;
-        }
-
-        .form-check label {
-            font-weight: 400;
         }
 
         .btn-primary {
@@ -120,7 +102,6 @@ require("../config.php");
         .text-center {
             text-align: center;
             margin-top: 1rem;
-            width: 100%;
         }
 
         .text-center a {
@@ -131,6 +112,16 @@ require("../config.php");
         .text-center a:hover {
             text-decoration: underline;
         }
+
+        .form-group a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .form-group a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -138,7 +129,12 @@ require("../config.php");
     <div class="header">
         <h1>Welcome!</h1>
     </div>
-    <form method="POST" action="login">
+
+    <?php if ($error_message): ?>
+        <p class="error-message"><?php echo htmlspecialchars($error_message); ?></p>
+    <?php endif; ?>
+
+    <form method="POST" action="/dashboard">
         <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="Enter your email" required>
@@ -146,10 +142,7 @@ require("../config.php");
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Enter your password" required>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" id="remember-me">
-            <label for="remember-me">Remember Me</label>
+            <a href="/resetpassword">Forgot Password?</a> <!-- Added link to reset password view -->
         </div>
         <button type="submit" class="btn-primary">Sign in</button>
         <div class="text-center">

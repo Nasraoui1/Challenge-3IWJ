@@ -2,12 +2,14 @@
 
 namespace App\Core;
 
-class Form {
+class Form
+{
     private $config;
     private $errors = [];
     private $fields = [];
 
-    public function __construct(string $name) {
+    public function __construct(string $name)
+    {
         $formPath = "../Forms/" . $name . ".php";
         if (!file_exists($formPath)) {
             die("Le form " . $name . ".php n'existe pas dans le dossier ../Forms");
@@ -17,11 +19,13 @@ class Form {
         $this->config = $formClass::getConfig();
     }
 
-    public function setField($fieldName, $value) {
+    public function setField($fieldName, $value)
+    {
         $this->fields[$fieldName] = $value;
     }
 
-    public function build(): string {
+    public function build(): string
+    {
         $html = "";
 
         $enctype = $this->config["config"]["enctype"] ?? '';
@@ -104,7 +108,8 @@ class Form {
         return $html;
     }
 
-    public function isSubmitted(): bool {
+    public function isSubmitted(): bool
+    {
         if ($this->config["config"]["method"] === "POST" && !empty($_POST)) {
             return true;
         } elseif ($this->config["config"]["method"] === "GET" && !empty($_GET)) {
@@ -113,7 +118,64 @@ class Form {
         return false;
     }
 
-    public function isValid(): bool {
+    public function isValid(): bool
+    {
+        $this->errors = []; // Reset errors before validation
+
+        foreach ($this->config["inputs"] as $name => $inputConfig) {
+            if (!isset($inputConfig["type"]) || $inputConfig["type"] !== "submit") {
+
+                // Check if the field is required and present
+                if (isset($inputConfig["required"]) && $inputConfig["required"] === true) {
+                    if (!isset($_POST[$name]) || empty(trim($_POST[$name]))) {
+                        $this->errors[] = "Le champ " . htmlentities($name) . " ne doit pas être vide";
+                        continue; // Skip further checks if field is required and missing
+                    }
+                }
+
+                // Check if the field is present in the POST data
+                if (isset($_POST[$name])) {
+                    $dataSent = $_POST[$name];
+
+                    // Check for unauthorized fields
+                    if (!isset($this->config["inputs"][$name])) {
+                        $this->errors[] = "Le champ " . htmlentities($name) . " n'est pas autorisé";
+                    }
+
+                    // Length checks
+                    if (isset($inputConfig["min"]) && strlen($dataSent) < $inputConfig["min"]) {
+                        $this->errors[] = $inputConfig["error"];
+                    }
+                    if (isset($inputConfig["max"]) && strlen($dataSent) > $inputConfig["max"]) {
+                        $this->errors[] = $inputConfig["error"];
+                    }
+
+                    // Specific checks for email and password
+                    if ($inputConfig["type"] === "email" && !filter_var($dataSent, FILTER_VALIDATE_EMAIL)) {
+                        $this->errors[] = "Le format de l'email est incorrect";
+                    }
+                    if ($inputConfig["type"] === "password" && strlen($dataSent) >= 8 &&
+                        (!preg_match("#[a-z]#", $dataSent) || !preg_match("#[A-Z]#", $dataSent) || !preg_match("#[0-9]#", $dataSent))) {
+                        $this->errors[] = $inputConfig["error"];
+                    }
+
+                    // Comment field specific check
+                    if (isset($inputConfig['label']) && $inputConfig['label'] === "Laisser un commentaire" &&
+                        preg_match('/(https?|ftp):\/\/([^\s]+)/i', $dataSent)) {
+                        $this->errors[] = "Les URL ne sont pas autorisés dans le commentaire.";
+                    }
+
+                    // Confirmation field check
+                    if (isset($inputConfig["confirm"]) && $dataSent != $_POST[$inputConfig["confirm"]]) {
+                        $this->errors[] = $inputConfig["error"];
+                    }
+                }
+            }
+        }
+
+        return empty($this->errors);
+    }
+    public function isValidd(): bool {
         $expectedFieldsCount = 0;
         foreach ($this->config["inputs"] as $name => $inputConfig) {
             if (!isset($inputConfig["type"]) || $inputConfig["type"] !== "submit") {
@@ -166,4 +228,7 @@ class Form {
 
         return empty($this->errors);
     }
+
 }
+
+

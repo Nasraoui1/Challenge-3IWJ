@@ -1,7 +1,12 @@
 <?php
-
 namespace App;
 
+require '../vendor/autoload.php';
+
+// Démarrer la session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 //Notre Autoloader
 spl_autoload_register("App\myAutoloader");
 

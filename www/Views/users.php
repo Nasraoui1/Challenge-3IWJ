@@ -115,7 +115,7 @@
 
 <div class="user-management">
     <h2>Utilisateurs</h2>
-    <button onclick="window.location.href='/add-user'">Add User</button> <!-- Corrected URL -->
+    <button onclick="window.location.href='/dashboard/add-user'">Add User</button>
     <table class="user-table">
         <thead>
         <tr>
@@ -123,6 +123,7 @@
             <th>Prénom</th>
             <th>Nom</th>
             <th>Email</th>
+            <th>Role</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -133,6 +134,7 @@
                 <td data-label="Prénom"><?= htmlspecialchars($user['firstname']) ?></td>
                 <td data-label="Nom"><?= htmlspecialchars($user['lastname']) ?></td>
                 <td data-label="Email"><?= htmlspecialchars($user['email']) ?></td>
+                <td data-label="Role"><?= htmlspecialchars($user['id_role'] == 1 ? 'Admin' : 'User') ?></td>
                 <td data-label="Actions">
                     <form method="post" action="/dashboard/updateUserForm">
                         <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">

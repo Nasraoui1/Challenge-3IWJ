@@ -2,14 +2,14 @@ version: '3'
 services:
   web:
     build: site
-    ports :
-      - "80:80"
+    expose:
+      - "80"
     volumes:
       - ./www:/var/www/html/
       - ./server/000-default.conf:/etc/apache2/sites-available/000-default.conf
       - ./server/apache2.conf:/etc/apache2/apache2.conf
       - ./server/php.ini:/usr/local/etc/php/php.ini
-  
+
   postgres:
     image: postgres:latest
     container_name: postgres_db
@@ -33,4 +33,14 @@ services:
     depends_on:
       - postgres
 
-  
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
