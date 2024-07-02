@@ -9,6 +9,8 @@ services:
       - ./server/000-default.conf:/etc/apache2/sites-available/000-default.conf
       - ./server/apache2.conf:/etc/apache2/apache2.conf
       - ./server/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - default
 
   postgres:
     image: postgres:latest
@@ -21,6 +23,8 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    networks:
+      - default
 
   pgadmin:
     image: dpage/pgadmin4
@@ -32,13 +36,22 @@ services:
       - "5050:80"
     depends_on:
       - postgres
+    networks:
+      - default
 
   nginx:
     image: nginx:latest
     ports:
       - "8080:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
       - ./www:/var/www/html
     depends_on:
       - web
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: challenge-3iwj_default
