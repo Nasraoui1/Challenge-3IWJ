@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Pages</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -29,7 +28,7 @@
             margin-bottom: 20px;
         }
 
-        .page-management .btn {
+        .page-management .btn-primary {
             background-color: #007bff;
             color: #fff;
             border: none;
@@ -40,7 +39,7 @@
             margin-bottom: 20px;
         }
 
-        .page-management .btn:hover {
+        .page-management .btn-primary:hover {
             background-color: #0056b3;
         }
 
@@ -116,36 +115,37 @@
 
 <div class="page-management">
     <h2>Liste des Pages</h2>
-    <button class="btn" onclick="window.location.href='/create-page'">Ajouter une Page</button>
-    <?php if (!empty($pages)): ?>
-        <table class="page-table highlight responsive-table">
-            <thead>
+    <button class="btn-primary" onclick="window.location.href='/dashboard/add-page'">Add Page</button>
+    <table class="page-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($pages as $page): ?>
             <tr>
-                <th>Titre</th>
-                <th>Contenu</th>
-                <th>Description</th>
-                <th>Actions</th>
+                <td data-label="ID"><?= htmlspecialchars($page['id']) ?></td>
+                <td data-label="Title"><?= htmlspecialchars($page['title']) ?></td>
+                <td data-label="Description"><?= htmlspecialchars($page['description']) ?></td>
+                <td data-label="Actions">
+                    <form method="post" action="/dashboard/updatePageForm">
+                        <input type="hidden" name="id" value="<?= htmlspecialchars($page['id']) ?>">
+                        <button type="submit">Update</button>
+                    </form>
+                    <form method="post" action="/dashboard/deletePage" onsubmit="return confirm('Are you sure you want to delete this page?');">
+                        <input type="hidden" name="id" value="<?= htmlspecialchars($page['id']) ?>">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($pages as $page): ?>
-                <tr>
-                    <td data-label="Titre"><?= htmlspecialchars($page->getTitle()) ?></td>
-                    <td data-label="Contenu"><?= htmlspecialchars($page->getContent()) ?></td>
-                    <td data-label="Description"><?= htmlspecialchars($page->getDescription()) ?></td>
-                    <td data-label="Actions">
-                        <a href="/view-page/<?= $page->getSlug() ?>" class="btn blue">Voir</a>
-                        <a href="/edit-page?id=<?= $page->getId() ?>" class="btn orange">Modifier</a>
-                        <form method="post" action="/delete-page" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette page ?');">
-                            <input type="hidden" name="id" value="<?= htmlspecialchars($page->getId()) ?>">
-                            <button type="submit" class="btn red">Supprimer</button>
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <p>Aucune page trouvée.</p>
-    <?php endif; ?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
+
+</body>
+</html>
