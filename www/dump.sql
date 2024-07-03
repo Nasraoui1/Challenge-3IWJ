@@ -1,10 +1,3 @@
-BEGIN;
-
--- Définir le fuseau horaire
-SET TIME ZONE 'UTC';
-
--- Supprimer la table si elle existe
-DROP TABLE IF EXISTS "chall_user";
 
 -- Créer la table `chall_user`
 CREATE TABLE IF NOT EXISTS "chall_user" (
