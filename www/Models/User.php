@@ -151,7 +151,7 @@ class User extends SQL
     public function createUser($firstname, $lastname, $email, $password, $id_role)
     {
         $activation_token = $this->generateToken();
-        $stmt = $this->pdo->prepare("INSERT INTO chall_users (firstname, lastname, email, password, id_role, activation_token) VALUES (:firstname, :lastname, :email, :password, :id_role, :activation_token)");
+        $stmt = $this->pdo->prepare("INSERT INTO chall_user (firstname, lastname, email, password, id_role, activation_token) VALUES (:firstname, :lastname, :email, :password, :id_role, :activation_token)");
         $stmt->execute([
             'firstname' => $firstname,
             'lastname' => $lastname,
