@@ -12,7 +12,7 @@ require("../config.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add User</title>
+    <title>Update User</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -26,7 +26,7 @@ require("../config.php");
             height: 100vh;
         }
 
-        .add-user-form {
+        .update-user-form {
             width: 100%;
             max-width: 400px;
             padding: 20px;
@@ -40,7 +40,7 @@ require("../config.php");
             align-items: center;
         }
 
-        .add-user-form h2 {
+        .update-user-form h2 {
             text-align: center;
             margin-bottom: 20px;
         }
@@ -112,14 +112,14 @@ require("../config.php");
     </style>
 </head>
 <body>
-<div class="add-user-form">
-    <h2>Add User</h2>
+<div class="update-user-form">
+    <h2>Update User</h2>
 
     <?php if (isset($error_message) && $error_message): ?>
         <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
     <?php endif; ?>
 
-    <form method="POST" action="/dashboard/addUser">
+    <form method="POST" action="/dashboard/updateUser">
         <div class="form-group">
             <label for="firstname">First Name</label>
             <input type="text" id="firstname" name="firstname" placeholder="Enter first name" required>
@@ -143,7 +143,7 @@ require("../config.php");
                 <option value="1">Admin</option>
             </select>
         </div>
-        <button type="submit" class="btn-primary">Add User</button>
+        <button type="submit" class="btn-primary">Update User</button>
     </form>
 </div>
 </body>
