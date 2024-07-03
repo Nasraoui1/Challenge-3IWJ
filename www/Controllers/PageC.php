@@ -55,6 +55,7 @@ class PageC
         $pages = $pageModel->getAllPages();
         $view = new View("listPage");
         $view->assign("pages", $pages);
+        include '../Views/dashboardTemplate.php';
         $view->render();
     }
 
