@@ -125,7 +125,7 @@ $id_role = $_SESSION['id_role'] ?? null;
             <a href="register" class="btn btn-secondary">Register</a>
             <a href="logout" class="btn btn-danger">Logout</a>
             <?php
-            if (isset($_SESSION['id_role']) && $_SESSION['id_role'] == 1) {
+            if (isset($_SESSION['id_role'])) {
                 echo '<a href="dashboard" class="btn btn-dashboard">Dashboard</a>';
             }
             ?>
