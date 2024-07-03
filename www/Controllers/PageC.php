@@ -18,7 +18,7 @@ class PageC
     public function create()
     {
         $form = new Form("CreatePage");
-        $view = new View("CreatePage");
+        $view = new View("createpage");
         $view->assign("form", $form->build());
         $view->render();
     }
@@ -36,7 +36,7 @@ class PageC
             $page->setSlug($_POST['slug']);
 
             if ($page->save()) {
-                header("Location: /dashboard");
+                header("Location: /list-page");
                 exit();
             } else {
                 echo "There was an error saving the page.";
@@ -49,20 +49,11 @@ class PageC
         }
     }
 
-    public function index()
-    {
-        $page = new Page();
-        $pages = $page->getAllPages();
-        $view = new View("Main/dashboard");
-        $view->assign("pages", $pages);
-        $view->render();
-    }
-
     public function list()
     {
         $pageModel = new Page();
         $pages = $pageModel->getAllPages();
-        $view = new View("Page/listPage");
+        $view = new View("listPage");
         $view->assign("pages", $pages);
         $view->render();
     }

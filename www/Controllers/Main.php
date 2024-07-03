@@ -17,7 +17,6 @@ class Main
     {
         // Check if id_role is set in the session
         $id_role = $_SESSION['id_role'] ?? null;
-        echo $_SESSION['id_role'];
         // Assign id_role to the view and render the view
         $view = new View("home");
         $view->assign("id_role", $id_role);
