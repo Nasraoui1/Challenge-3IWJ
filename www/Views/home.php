@@ -2,6 +2,9 @@
 // Set the title and content
 $title = "Bienvenue";
 $content = "<h3>Les projets de nos utilisateurs</h3>";
+
+// Start session to access session variables
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -77,6 +80,14 @@ $content = "<h3>Les projets de nos utilisateurs</h3>";
             background-color: #c82333;
         }
 
+        .nav a.btn-dashboard {
+            background-color: #28a745;
+        }
+
+        .nav a.btn-dashboard:hover {
+            background-color: #218838;
+        }
+
         .main-content {
             background-color: #ffffff;
             padding: 20px;
@@ -115,6 +126,11 @@ $content = "<h3>Les projets de nos utilisateurs</h3>";
             <a href="login" class="btn btn-primary">Login</a>
             <a href="register" class="btn btn-secondary">Register</a>
             <a href="logout" class="btn btn-danger">Logout</a>
+            <?php
+            if (isset($_SESSION['id_role']) && $_SESSION['id_role'] == 1) {
+                echo '<a href="dashboard" class="btn btn-dashboard">Dashboard</a>';
+            }
+            ?>
         </nav>
     </div>
 </header>
