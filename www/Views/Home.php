@@ -3,8 +3,6 @@
 $title = "Bienvenue";
 $content = "<h3>Les projets de nos utilisateurs</h3>";
 
-// Start session to access session variables
-session_start();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
