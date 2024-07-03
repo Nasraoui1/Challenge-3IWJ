@@ -2,7 +2,7 @@
 // Set the title and content
 $title = "Bienvenue";
 $content = "<h3>Les projets de nos utilisateurs</h3>";
-
+$id_role = $_SESSION['id_role'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
