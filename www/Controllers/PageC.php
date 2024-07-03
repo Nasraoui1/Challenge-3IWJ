@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Core\Security as Auth;
 use App\Core\View;
 use App\Core\Form;
 use App\Models\Page;
@@ -13,13 +12,6 @@ class PageC
     {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
-        }
-
-        $security = new Auth();
-
-        if (!$security->isLoggedIn()) {
-            echo "Vous devez vous  connectez";
-            return;
         }
     }
 
@@ -33,11 +25,6 @@ class PageC
 
     public function store()
     {
-        $security = new Auth();
-        if (!$security->isLoggedIn()) {
-            header("Location: /register");
-            exit();
-        }
         $form = new Form("CreatePage");
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -45,7 +32,7 @@ class PageC
             $page->setTitle($_POST['title']);
             $page->setContent($_POST['content']);
             $page->setDescription($_POST['description'] ?? null);
-            $page->setUserId($_SESSION['user_id']);
+            $page->setUserId($_SESSION['user_id'] ?? null);
             $page->setSlug($_POST['slug']);
 
             if ($page->save()) {
@@ -99,15 +86,8 @@ class PageC
         $view->render();
     }
 
-
     public function edit()
     {
-        $security = new Auth();
-        if (!$security->isLoggedIn() ){
-            header("Location: /login");
-            exit();
-        }
-
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             echo "Invalid page ID.";
             return;
@@ -145,12 +125,6 @@ class PageC
 
     public function delete()
     {
-        $security = new Auth();
-        if (!$security->isLoggedIn() ) {
-            header("Location: /login");
-            exit();
-        }
-
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             echo "Invalid page ID.";
             return;
@@ -166,5 +140,4 @@ class PageC
             echo "There was an error deleting the page.";
         }
     }
-
 }
