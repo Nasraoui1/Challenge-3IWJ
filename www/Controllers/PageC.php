@@ -18,7 +18,7 @@ class PageC
         $security = new Auth();
 
         if (!$security->isLoggedIn()) {
-            echo "Vous devez vous  connectézz";
+            echo "Vous devez vous  connectez";
             return;
         }
     }
@@ -94,7 +94,7 @@ class PageC
             return;
         }
 
-        $view = new View("Page/viewPage");
+        $view = new View("viewPage");
         $view->assign("page", $page);
         $view->render();
     }
@@ -138,7 +138,7 @@ class PageC
             $form->setValues($page->toArray());
         }
 
-        $view = new View("Page/editPage");
+        $view = new View("editPage");
         $view->assign("form", $form->build());
         $view->render();
     }

@@ -1,4 +1,4 @@
-<!-- Page/listPages.php -->
+<!-- listPages.php -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
