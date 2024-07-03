@@ -127,6 +127,7 @@ $id_role = $_SESSION['id_role'] ?? null;
             <?php
             if (isset($_SESSION['id_role'])) : ?>
                  <a href="/dashboard" class="btn btn-dashboard">Dashboard</a>;
+            <?php endif; ?>
         </nav>
     </div>
 </header>
