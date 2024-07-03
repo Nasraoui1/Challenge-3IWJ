@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Controller;
-
+use App\Models\User;
 use App\Core\Form;
 use App\Core\View;
-use App\Models\User;
-use Mailer;
+use App\Core\Mailer; // Assuming Mailer class is within App\Core namespace
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use App\Core\Security as Auth;
 
 class SecurityC {
     private $userModel;
@@ -48,43 +49,45 @@ class SecurityC {
 
 
 
-    public function login() {
-        $form = new Form('Login'); // Assuming you have a Form class
+    public function login(): void
+    {
+        $user = new User();
+        $security = new Auth();
+
+        // Check if the user is already logged in
+        if ($security->isLoggedIn()) {
+            echo "Vous êtes déjà connecté";
+            return;
+        }
+
+        $form = new Form("Login");
+
+        // Check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            if ($this->userModel->login($email, $password)) {
-                header('Location: /home');
-                exit;
+            // Attempt to log in
+            if ($user->login($email, $password)) {
+                // Store user details in session
+                $_SESSION['user_id'] = $user->getId();
+                $_SESSION['email'] = $email;
+                $_SESSION['id_role'] = $user->getIdRole(); // Assuming you have a getRoleId() method
+
+                // Redirect to home page
+                header("Location: /home");
+                exit();
             } else {
-                $_SESSION['error'] = 'Invalid email or password';
-                header('Location: /login');
-                exit;
+                echo "Invalid email or password.";
             }
         }
 
-        if (isset($_SESSION['error'])) {
-            $error_message = $_SESSION['error'];
-            unset($_SESSION['error']);
-        } else {
-            $error_message = '';
-        }
-
-        if (isset($_SESSION['message'])) {
-            $message = $_SESSION['message'];
-            unset($_SESSION['message']);
-        } else {
-            $message = '';
-        }
-
-        $view = new View("Security/login"); // Assuming you have a View class
-        $view->render(['error_message' => $error_message, 'message' => $message]);
+        // Render the login view
+        $view = new View("Security/login");
+        $view->assign("form", $form->build());
+        $view->render();
     }
 
-    public static function isLoggedIn() {
-        return isset($_SESSION['user_id']);
-    }
 
     public function logout() {
         session_destroy();

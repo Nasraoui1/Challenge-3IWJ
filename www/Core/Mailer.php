@@ -1,41 +1,45 @@
 <?php
 
+namespace App\Core;
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+
 class Mailer {
-    private $mail;
-
-    public function __construct() {
-        $this->mail = new PHPMailer(true);
-
+    public function sendMail($to, $subject, $body) {
         try {
-            // Server settings
-            $this->mail->isSMTP();
-            $this->mail->Host = 'sandbox.smtp.mailtrap.io';
-            $this->mail->SMTPAuth = true;
-            $this->mail->Port = 2525;
-            $this->mail->Username = '4d48b8e7828855';
-            $this->mail->Password = 'd6f0a0c1463508';
-            $this->mail->setFrom('no-reply@example.com', 'YourAppName');
+            // PHPMailer configuration
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host = 'sandbox.smtp.mailtrap.io'; // Update with your SMTP server details
+            $mail->SMTPAuth = true;
+            $mail->Username = '4d48b8e7828855'; // Update with your SMTP username
+            $mail->Password = 'd6f0a0c1463508'; // Update with your SMTP password
+            $mail->Port = 587;
+
+            // Recipients
+            $mail->setFrom('mahmoudaziznasraoui@gmail.com', 'Mailer'); // Update with your sender email and name
+            $mail->addAddress($to);
+
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body = $body;
+
+            // Send email
+            $mail->send();
+            echo 'Message has been sent';
         } catch (Exception $e) {
-            error_log("Mailer Error: {$this->mail->ErrorInfo}");
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     }
 
-    public function sendMail($to, $subject, $body) {
-        try {
-            // Recipients
-            $this->mail->addAddress($to);
+    public function sendVerificationEmail($to, $token): void
+    {
+        $subject = 'Email Verification';
+        $body = "Please click on the following link to verify your email address: <a href='http://yourdomain.com/verify?token=$token'>Verify Email</a>";
 
-            // Content
-            $this->mail->isHTML(true);
-            $this->mail->Subject = $subject;
-            $this->mail->Body    = $body;
-
-            $this->mail->send();
-        } catch (Exception $e) {
-            error_log("Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}");
-        }
+        $this->sendMail($to, $subject, $body);
     }
 }

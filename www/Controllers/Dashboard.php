@@ -12,7 +12,7 @@ class Dashboard {
 
     public function __construct() {
         $this->db = new SQL();
-        $this->checkAdmin(); // Check admin access on instantiation
+       // $this->checkAdmin(); // Check admin access on instantiation
     }
 
     private function checkAdmin() {
@@ -35,27 +35,27 @@ class Dashboard {
     }
 
     public function getUsers() {
-        $this->checkAdmin();
+        //$this->checkAdmin();
         $users = $this->db->getAllUsers();
         $content = '../Views/users.php';
         include '../Views/dashboardTemplate.php';
     }
 
     public function getAdmins() {
-        $this->checkAdmin();
+       // $this->checkAdmin();
         $admins = $this->db->getUsersByRole(1);
         $content = '../Views/admins.php';
         include '../Views/dashboardTemplate.php';
     }
 
     public function addUserForm() {
-        $this->checkAdmin();
-        $content = '../Views/addUserForm.php';
-        include '../Views/dashboardTemplate.php';
+       // $this->checkAdmin();
+        $view = new View("addUserForm");
+        $view->render();
     }
 
     public function addUser() {
-        $this->checkAdmin();
+        //$this->checkAdmin();
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];
@@ -68,15 +68,15 @@ class Dashboard {
     }
 
     public function updateUserForm() {
-        $this->checkAdmin();
+       // $this->checkAdmin();
         $id = $_POST['id'];
         $user = $this->db->getUserById($id);
-        $content = '../Views/updateUserForm.php';
-        include '../Views/dashboardTemplate.php';
+        $view = new View("updateUserForm");
+        $view->render();
     }
 
     public function updateUser() {
-        $this->checkAdmin();
+        //$this->checkAdmin();
         $id = $_POST['id'];
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
@@ -89,7 +89,7 @@ class Dashboard {
     }
 
     public function deleteUser() {
-        $this->checkAdmin();
+       // $this->checkAdmin();
         $id = $_POST['id'];
         $success = $this->db->deleteUser($id);
         if ($success) {

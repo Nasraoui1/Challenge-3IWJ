@@ -46,7 +46,6 @@
   Controller: SecurityC
   Action: logout
 
-
 /resetpassword:
   Controller: SecurityC
   Action: showResetPasswordForm
@@ -54,3 +53,7 @@
 /resetPasswordProcess:
   Controller: SecurityC
   Action: processResetPassword
+
+/activate:
+  Controller: SecurityC
+  Action: activate

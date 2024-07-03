@@ -5,7 +5,7 @@ namespace App\Core;
 class Form
 {
     private $config;
-    private $errors = [];
+    public $errors = [];
     private $fields = [];
 
     public function __construct(string $name)

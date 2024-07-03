@@ -1,4 +1,13 @@
-    CREATE TABLE chall_users (
+BEGIN;
+
+-- Définir le fuseau horaire
+SET TIME ZONE 'UTC';
+
+-- Supprimer la table si elle existe
+DROP TABLE IF EXISTS "chall_user";
+
+-- Créer la table `chall_user`
+CREATE TABLE IF NOT EXISTS "chall_user" (
                            id SERIAL PRIMARY KEY,
                            firstname VARCHAR(255) NOT NULL,
                            lastname VARCHAR(255) NOT NULL,

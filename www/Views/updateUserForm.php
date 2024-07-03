@@ -4,6 +4,7 @@ $page_titre = "Update User";
 require("../config.php");
 
 // Assuming $user variable is set
+
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +12,7 @@ require("../config.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update User</title>
+    <title>Add User</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -25,7 +26,7 @@ require("../config.php");
             height: 100vh;
         }
 
-        .update-user-form {
+        .add-user-form {
             width: 100%;
             max-width: 400px;
             padding: 20px;
@@ -39,7 +40,7 @@ require("../config.php");
             align-items: center;
         }
 
-        .update-user-form h2 {
+        .add-user-form h2 {
             text-align: center;
             margin-bottom: 20px;
         }
@@ -56,7 +57,7 @@ require("../config.php");
             text-align: left;
         }
 
-        .form-group input, .form-group select {
+        .form-group input {
             width: 100%;
             padding: 0.75rem;
             font-size: 1rem;
@@ -65,7 +66,7 @@ require("../config.php");
             color: #333;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus {
             outline: none;
             border-color: #007bff;
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
@@ -111,36 +112,40 @@ require("../config.php");
     </style>
 </head>
 <body>
-<div class="update-user-form">
-    <h2>Update User</h2>
+<div class="add-user-form">
+    <h2>Add User</h2>
 
     <?php if (isset($error_message) && $error_message): ?>
         <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
     <?php endif; ?>
 
-    <form method="POST" action="/dashboard/updateUser">
-        <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
+    <form method="POST" action="/dashboard/addUser">
         <div class="form-group">
             <label for="firstname">First Name</label>
-            <input type="text" id="firstname" name="firstname" value="<?= htmlspecialchars($user['firstname']) ?>" placeholder="Enter first name" required>
+            <input type="text" id="firstname" name="firstname" placeholder="Enter first name" required>
         </div>
         <div class="form-group">
             <label for="lastname">Last Name</label>
-            <input type="text" id="lastname" name="lastname" value="<?= htmlspecialchars($user['lastname']) ?>" placeholder="Enter last name" required>
+            <input type="text" id="lastname" name="lastname" placeholder="Enter last name" required>
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" placeholder="Enter email" required>
+            <input type="email" id="email" name="email" placeholder="Enter email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
         </div>
         <div class="form-group">
             <label for="id_role">Role</label>
             <select id="id_role" name="id_role" required>
-                <option value="0" <?= $user['id_role'] == 0 ? 'selected' : '' ?>>User</option>
-                <option value="1" <?= $user['id_role'] == 1 ? 'selected' : '' ?>>Admin</option>
+                <option value="0">User</option>
+                <option value="1">Admin</option>
             </select>
         </div>
-        <button type="submit" class="btn-primary">Update User</button>
+        <button type="submit" class="btn-primary">Add User</button>
     </form>
 </div>
 </body>
 </html>
+

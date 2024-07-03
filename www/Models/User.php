@@ -3,6 +3,7 @@ namespace App\Models;
 
 use App\Core\SQL;
 use DateTime;
+use PDO;
 
 class User extends SQL
 {
@@ -24,16 +25,30 @@ class User extends SQL
 
     public function login(string $email, string $password): bool
     {
-        $user = $this->getUserByEmail($email);
+        // Query to get user details by email
+        $sql = "SELECT id, email, password, id_role FROM " . $this->table . " WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
 
-        if ($user && $this->verifyPassword($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['id_role'] = $user['id_role'];
-            return true;
+        try {
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Check if user exists and verify the password
+            if ($user && password_verify($password, $user['password'])) {
+                // Set session variables
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['id_role'] = $user['id_role'];
+                return true;
+            }
+        } catch (PDOException $e) {
+            die('SQL Error: ' . $e->getMessage());
         }
+
         return false;
     }
+
 
     public function setId(?int $id): void
     {
@@ -153,13 +168,30 @@ class User extends SQL
         return bin2hex(random_bytes(16));
     }
 
-    public function activateUser($token)
-    {
-        $stmt = $this->pdo->prepare("UPDATE chall_users SET activation_token = NULL WHERE activation_token = :token");
-        $stmt->execute(['token' => $token]);
-        return $stmt->rowCount() > 0;
+    public function activateUser($token) {
+        $stmt = $this->db->prepare("UPDATE chall_users SET is_verified = TRUE WHERE verification_token = :token");
+        $stmt->bindParam(':token', $token);
+        return $stmt->execute();
     }
 
+
+    public function storeVerificationToken($email, $token) {
+        $stmt = $this->db->prepare("UPDATE chall_users SET verification_token = ? WHERE email = ?");
+        $stmt->execute([$token, $email]);
+    }
+
+    public function verifyUser($token) {
+        $stmt = $this->db->prepare("SELECT * FROM chall_users WHERE verification_token = ?");
+        $stmt->execute([$token]);
+        $user = $stmt->fetch();
+
+        if ($user) {
+            $stmt = $this->db->prepare("UPDATE chall_users SET is_verified = 1, verification_token = NULL WHERE id = ?");
+            return $stmt->execute([$user['id']]);
+        }
+
+        return false;
+    }
 
 
 }
