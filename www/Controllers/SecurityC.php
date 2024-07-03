@@ -69,9 +69,7 @@ class SecurityC {
 
             // Attempt to log in
             if ($user->login($email, $password)) {
-                error_log("User ID: " . $user->getId());
-                error_log("User Email: " . $user->getEmail());
-                error_log("User Role ID: " . $user->getIdRole());
+
                 // Start session if not already started
                 if (session_status() == PHP_SESSION_NONE) {
                     session_start();

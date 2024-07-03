@@ -57,3 +57,28 @@
 /activate:
   Controller: SecurityC
   Action: activate
+/create-page:
+  Controller: "PageController"
+  Action: "create"
+
+/store-page:
+  Controller: "PageController"
+  Action: "store"
+
+/view-page/{slug}:
+  Controller: "PageController"
+  Action: "view"
+
+/list-page:
+  Controller: "PageController"
+  Action: "list"
+
+/edit-page:
+  Controller: "PageController"
+  Action: "edit"
+  Method: "GET"
+  Role: ["admin", "editor"]
+
+/delete-page:
+  Controller: "PageController"
+  Action: "delete"

@@ -12,7 +12,7 @@ class Dashboard {
 
     public function __construct() {
         $this->db = new SQL();
-        $this->checkAdmin(); // Check admin access on instantiation
+       // $this->checkAdmin(); // Check admin access on instantiation
 
     }
 
@@ -36,27 +36,27 @@ class Dashboard {
     }
 
     public function getUsers() {
-        $this->checkAdmin(); // Check admin access on instantiation
+       // $this->checkAdmin(); // Check admin access on instantiation
         $users = $this->db->getAllUsers();
         $content = '../Views/users.php';
         include '../Views/dashboardTemplate.php';
     }
 
     public function getAdmins() {
-        $this->checkAdmin(); // Check admin access on instantiation
+       // $this->checkAdmin(); // Check admin access on instantiation
         $admins = $this->db->getUsersByRole(1);
         $content = '../Views/admins.php';
         include '../Views/dashboardTemplate.php';
     }
 
     public function addUserForm() {
-        $this->checkAdmin(); // Check admin access on instantiation
+       // $this->checkAdmin(); // Check admin access on instantiation
         $view = new View("addUserForm");
         $view->render();
     }
 
     public function addUser() {
-        $this->checkAdmin(); // Check admin access on instantiation
+       // $this->checkAdmin(); // Check admin access on instantiation
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];
@@ -69,7 +69,7 @@ class Dashboard {
     }
 
     public function updateUserForm() {
-        $this->checkAdmin(); // Check admin access on instantiation
+      //  $this->checkAdmin(); // Check admin access on instantiation
         $id = $_POST['id'];
         $user = $this->db->getUserById($id);
         $view = new View("updateUserForm");
@@ -77,7 +77,7 @@ class Dashboard {
     }
 
     public function updateUser() {
-        $this->checkAdmin(); // Check admin access on instantiation
+        //$this->checkAdmin(); // Check admin access on instantiation
         $id = $_POST['id'];
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
@@ -90,7 +90,7 @@ class Dashboard {
     }
 
     public function deleteUser() {
-        $this->checkAdmin(); // Check admin access on instantiation
+        //$this->checkAdmin(); // Check admin access on instantiation
         $id = $_POST['id'];
         $success = $this->db->deleteUser($id);
         if ($success) {
