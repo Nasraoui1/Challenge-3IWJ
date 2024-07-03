@@ -69,10 +69,15 @@ class SecurityC {
 
             // Attempt to log in
             if ($user->login($email, $password)) {
+                // Start session if not already started
+                if (session_status() == PHP_SESSION_NONE) {
+                    session_start();
+                }
+
                 // Store user details in session
                 $_SESSION['user_id'] = $user->getId();
-                $_SESSION['email'] = $email;
-                $_SESSION['id_role'] = $user->getIdRole(); // Assuming you have a getRoleId() method
+                $_SESSION['email'] = $user->getEmail();
+                $_SESSION['id_role'] = $user->getIdRole();
 
                 // Redirect to home page
                 header("Location: /home");
@@ -87,6 +92,7 @@ class SecurityC {
         $view->assign("form", $form->build());
         $view->render();
     }
+
 
 
     public function logout() {
