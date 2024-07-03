@@ -11,6 +11,9 @@
 <body>
 <div class="container">
   <h1>List Pages</h1>
+    <div style="margin-bottom: 20px;">
+        <a href="/create-page" class="btn btn-primary">Create Page</a>
+    </div>
     <?php if (!empty($pages)): ?>
       <table>
         <thead>
