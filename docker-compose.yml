@@ -14,7 +14,7 @@ services:
 
   postgres:
     image: postgres:latest
-    container_name: postgres_db
+    hostname: postgres
     ports:
       - "5432:5432"
     environment:
@@ -22,7 +22,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./www/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     networks:
       - default
 
