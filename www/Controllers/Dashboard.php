@@ -12,7 +12,7 @@ class Dashboard {
 
     public function __construct() {
         $this->db = new SQL();
-       // $this->checkAdmin(); // Check admin access on instantiation
+        $this->checkAdmin(); // Check admin access on instantiation
     }
 
     private function checkAdmin() {
