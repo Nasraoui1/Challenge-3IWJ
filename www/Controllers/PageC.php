@@ -32,7 +32,7 @@ class PageC
             $page->setTitle($_POST['title']);
             $page->setContent($_POST['content']);
             $page->setDescription($_POST['description'] ?? null);
-            $page->setUserId($_SESSION['user_id'] ?? null);
+          //  $page->setUserId($_SESSION['user_id'] ?? null);
             $page->setSlug($_POST['slug']);
 
             if ($page->save()) {
