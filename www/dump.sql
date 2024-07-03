@@ -1,6 +1,6 @@
 
 -- Créer la table `chall_user`
-CREATE TABLE IF NOT EXISTS "chall_user" (
+CREATE TABLE IF NOT EXISTS "chall_users" (
                            id SERIAL PRIMARY KEY,
                            firstname VARCHAR(255) NOT NULL,
                            lastname VARCHAR(255) NOT NULL,
