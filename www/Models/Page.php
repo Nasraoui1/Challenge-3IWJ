@@ -11,7 +11,6 @@ class Page extends SQL
     protected string $title;
     protected string $content;
     protected ?string $description = null;
-    protected int $user_id;
     protected string $slug;
 
     public function getId(): ?int
@@ -54,16 +53,6 @@ class Page extends SQL
         $this->description = $description;
     }
 
-    public function getUserId(): int
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId(int $user_id): void
-    {
-        $this->user_id = $user_id;
-    }
-
     public function getSlug(): string
     {
         return $this->slug;
@@ -88,10 +77,9 @@ class Page extends SQL
             $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
         } else {
             // Insert new page
-            $sql = "INSERT INTO chall_page (title, content, description, user_id, slug, date_inserted, date_updated)
-                    VALUES (:title, :content, :description, :user_id, :slug, NOW(), NOW())";
+            $sql = "INSERT INTO chall_page (title, content, description, slug, date_inserted, date_updated)
+                    VALUES (:title, :content, :description, :slug, NOW(), NOW())";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(':user_id', $this->user_id, PDO::PARAM_INT);
         }
 
         $stmt->bindParam(':title', $this->title, PDO::PARAM_STR);
@@ -156,7 +144,6 @@ class Page extends SQL
             'title' => $this->title,
             'content' => $this->content,
             'description' => $this->description,
-            'user_id' => $this->user_id,
             'slug' => $this->slug,
         ];
     }
