@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Models\Page;
 use App\Models\User;
 use App\Core\Form;
 use App\Core\View;
@@ -95,7 +96,25 @@ class SecurityC {
     }
 
 
+    public function sitemap() {
+        $listOfRoutes = yaml_parse_file("../Routes.yml");
+        $html = '<?xml version="1.0" encoding="UTF-8"?>';
+        $html .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
+
+        $pageModel = new Page();
+        $pages = $pageModel->getAllPages();
+
+        foreach ($pages as $page) {
+            $html .= '<url>';
+            $html .= '<loc>/view-page/' . htmlspecialchars($page->getSlug(), ENT_XML1, 'UTF-8') . '</loc>';
+            $html .= '</url>';
+        }
+        $html .= '</urlset>';
+
+        header('Content-Type: application/xml');
+        echo $html;
+    }
     public function logout() {
         session_destroy();
         header('Location: /login');

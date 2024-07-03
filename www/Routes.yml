@@ -82,3 +82,7 @@
 /delete-page:
   Controller: PageC
   Action: delete
+
+/sitemap.xml:
+  Controller: SecurityC
+  Action: sitemap
