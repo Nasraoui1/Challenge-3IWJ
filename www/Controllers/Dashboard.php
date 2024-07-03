@@ -12,6 +12,8 @@ class Dashboard {
 
     public function __construct() {
         $this->db = new SQL();
+        $this->checkAdmin(); // Check admin access on instantiation
+
     }
 
     private function checkAdmin() {
@@ -22,7 +24,6 @@ class Dashboard {
     }
 
     public function index() {
-        $this->checkAdmin(); // Check admin access on instantiation
         $userCount = $this->db->getUserCount();
         $adminCount = $this->db->getAdminCount();
         $elementsCount = [
