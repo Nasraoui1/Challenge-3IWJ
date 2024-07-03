@@ -134,7 +134,7 @@ if (isset($_SESSION['error'])) {
         <p class="error-message"><?php echo htmlspecialchars($error_message); ?></p>
     <?php endif; ?>
 
-    <form method="POST" action="/dashboard">
+    <form method="POST" action="/home">
         <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="Enter your email" required>
