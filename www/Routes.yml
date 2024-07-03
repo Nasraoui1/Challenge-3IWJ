@@ -57,7 +57,7 @@
 /activate:
   Controller: SecurityC
   Action: activate
-  
+
 /create-page:
   Controller: PageC
   Action: create

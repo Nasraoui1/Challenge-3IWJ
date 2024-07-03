@@ -17,7 +17,7 @@ class PageC
 
         $security = new Auth();
 
-        if (!$security->isLogged()) {
+        if (!$security->isLoggedIn()) {
             echo "Vous devez vous  connectézz";
             return;
         }
@@ -103,7 +103,7 @@ class PageC
     public function edit()
     {
         $security = new Auth();
-        if (!$security->isLogged() || !$security->hasRole(['admin', 'author'])) {
+        if (!$security->isLoggedIn() ){
             header("Location: /login");
             exit();
         }
@@ -146,7 +146,7 @@ class PageC
     public function delete()
     {
         $security = new Auth();
-        if (!$security->isLogged() || !$security->hasRole(['admin', 'author'])) {
+        if (!$security->isLoggedIn() ) {
             header("Location: /login");
             exit();
         }
