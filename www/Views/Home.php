@@ -124,10 +124,6 @@ $id_role = $_SESSION['id_role'] ?? null;
             <a href="login" class="btn btn-primary">Login</a>
             <a href="register" class="btn btn-secondary">Register</a>
             <a href="logout" class="btn btn-danger">Logout</a>
-            <?php
-            if (isset($_SESSION['id_role'])) : ?>
-                 <a href="/dashboard" class="btn btn-dashboard">Dashboard</a>;
-            <?php endif; ?>
         </nav>
     </div>
 </header>
@@ -138,6 +134,7 @@ $id_role = $_SESSION['id_role'] ?? null;
         echo $content;
     } else {
         echo "<h3>Les projets de nos utilisateurs</h3>";
+        echo $_SESSION['id_role'];
     }
     ?>
 </main>
