@@ -84,7 +84,7 @@ class Form
         }
     }
 
-    public function isValid(): bool
+    public function isValidd(): bool
     {
         // Est-ce que j'ai exactement le même nb de champs
         if (count($this->config["inputs"]) != count($_POST)) {
